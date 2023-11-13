@@ -1,58 +1,6 @@
-import axios from 'axios';
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
-import {toast} from 'react-toastify';
-import Input from '../../shard/Input';
-import {validationUserData} from '../../validation/uservalidation.js'
-import Loader from './Loader.jsx';
-export default function Create() {
-  const navigate = useNavigate();
-  let [errors , setErrors]= useState({
-    name:'',
-    email:'',
-    password:'', 
-  })
-  let [user,setUser]=useState({
-    name:'',
-    email:'',
-    password:'',
+import React from 'react'
 
-   });
-   let[backerror,setBackError]=useState("");
-   let [loader,setLoader]=useState(false);
-
-   const handelData =(e)=>{
-    const {name,value}= e.target;
-    setUser({...user, [name]:value})
-    console.log(user)
-   }
-   const sendData = async (e)=>{
-     e.preventDefault();
-     setLoader(true);
-     if (Object.keys(validationUserData(user)).length > 0){
-      setErrors(validationUserData(user));
-     }
-    else{
-      try{
-        const {data}=await axios.post('https://crud-users-gold.vercel.app/users',user) 
-        if (data.message=='success'){
-          toast('user added successfully');
-          navigate('/user/index');
-          setLoader(false);
-      }
-    }catch(err){
-      setBackError(err.response.data.message);
-      setErrors([]);
-      setLoader(false);  
-    }
-  }}
-  
-  if(loader==true){
-    return(
-      <Loader />
-    )
-  }
-  
+function Loader() {
   return (
     <div className="container-fluid">
     <div className="row flex-nowrap">
@@ -137,25 +85,17 @@ export default function Create() {
         </div>
       </div>
       <div className="col py-3">
-        {backerror && <p className='text-danger'>{backerror}</p>}
-        <form onSubmit={sendData}>
-        
-           <Input id={'username'} title={'user name'} type={'text'} name={'name'} errors={errors} handelData={handelData}/>
-           
-           <Input id={'email'} title={'user email'} type={'email'} name={'email'} errors={errors} handelData={handelData}/>
-           
-           <Input id={'password'} title={'user password'}   type={'password'} name={'password'} errors={errors} handelData={handelData}/>
-           
+    <div className="d-flex justify-content-center">
+    <div className="spinner-border" role="status">
        
+    </div>
+    </div>
 
-        
-       
-        <div className="mb-3">
-            <input type='submit' className='form-control bg-info' value='Add User' />
-        </div>
-        </form>
+
       </div>
     </div>
   </div>
   )
 }
+
+export default Loader

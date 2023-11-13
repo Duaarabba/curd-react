@@ -1,45 +1,22 @@
 
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import {toast} from 'react-toastify';
-import Details from './../Details';
-import Loader from './Loader';
-export default function Index() {
- const [users,setUsers]=useState([]);
- let [loader,setLoader]=useState(false);
 
- const getUseres = async ()=>{
-
-  const {data} = await axios.get('https://crud-users-gold.vercel.app/users/');
-  setUsers(data.users);
-  setLoader(false);
- }
- const deleteUser = async(id)=>{
-  setLoader(true);
-  const {data} = await axios.delete( `https://crud-users-gold.vercel.app/users/${id}`);
-  console.log(data);
-  if (data.message=='success'){
-    toast.success('User Deleted Successfully')
-    setLoader(false);
-    }}
-  useEffect(()=>{
-    setLoader(true);
-    getUseres();
-  },[]);
-  
-  
-  useEffect(()=>{
+export default function Details() {
    
-    getUseres();
-  },[users]);
-
-  if(loader==true){
-    return(
-      <Loader />
-    )
-  }
-
+    let [user,setUser]=useState({});
+    const {id} = useParams('id')
+    const getUser = async ()=>{
+      const {data} = await axios.get(`https://crud-users-gold.vercel.app/users/${id}`)
+      setUser(data.user)
+    }
+   useEffect(()=>{
+    getUser();
+   },[])
+  
+  
   return (
     <div className="container-fluid">
   <div className="row flex-nowrap">
@@ -124,36 +101,7 @@ export default function Index() {
       </div>
     </div>
     <div className="col py-3">
-    <table className="table">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">name</th>
-      <th scope="col">email</th>
-      <th scope="col">password</th>
-      <th scope="col" >action</th>
-    </tr>
-  </thead>
-  <tbody>
-    {users.length>0?users.map( (ele,index)=>
-     (
-       <React.Fragment key={ele._id}>
-         <tr>
-           <td>{index}</td>
-           <td>{ele.name}</td>
-           <td>{ele.email}</td>
-           <td>{ele.password}</td>
-           <td onClick={()=>deleteUser(ele._id)} className='bg-danger border rounded-2'>Delete</td>
-           <td><Link className='text-decoration-none text-black bg-success border rounded-2 p-2' to={`/user/${ele._id}`}>
-            Details</Link></td>
-           {/* <td onClick={()=>deleteUser(ele._id)} className='bg-success border rounded-2'>Details</td> */}
-         </tr>
-       </React.Fragment>
-      )
-     
-    ):<h2>No User Data</h2>}
-  </tbody>
-</table>
+    details for {user.name}
     </div>
   </div>
 </div>
