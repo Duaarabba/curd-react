@@ -5,12 +5,12 @@ import { Link } from 'react-router-dom';
 import {toast} from 'react-toastify';
 import Details from './../Details';
 import Loader from './Loader';
+import { RiDeleteBin6Line } from "react-icons/ri";
+import Eidt from './Edit';
 export default function Index() {
  const [users,setUsers]=useState([]);
  let [loader,setLoader]=useState(false);
-
  const getUseres = async ()=>{
-
   const {data} = await axios.get('https://crud-users-gold.vercel.app/users/');
   setUsers(data.users);
   setLoader(false);
@@ -22,26 +22,22 @@ export default function Index() {
   if (data.message=='success'){
     toast.success('User Deleted Successfully')
     setLoader(false);
+    getUseres();
     }}
   useEffect(()=>{
     setLoader(true);
     getUseres();
   },[]);
-  
-  
   useEffect(()=>{
-   
     getUseres();
-  },[users]);
-
+  },[]);
   if(loader==true){
     return(
       <Loader />
-    )
-  }
-
+    )}
   return (
     <div className="container-fluid">
+     {console.log('test')} 
   <div className="row flex-nowrap">
     <div className="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
       <div className="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
@@ -143,10 +139,10 @@ export default function Index() {
            <td>{ele.name}</td>
            <td>{ele.email}</td>
            <td>{ele.password}</td>
-           <td onClick={()=>deleteUser(ele._id)} className='bg-danger border rounded-2'>Delete</td>
-           <td><Link className='text-decoration-none text-black bg-success border rounded-2 p-2' to={`/user/${ele._id}`}>
-            Details</Link></td>
-           {/* <td onClick={()=>deleteUser(ele._id)} className='bg-success border rounded-2'>Details</td> */}
+           <td className='btn btn-danger  rounded-2' onClick={()=>deleteUser(ele._id)} ><RiDeleteBin6Line  className='fs-4 ' /></td>
+            <td className=' btn btn-info  rounded-2 '> <Link className='text-decoration-none text-black' to={`/user/${ele._id}`}>Details</Link></td>
+            
+            <td className='btn btn-warning '><Link className='text-decoration-none text-black' to={`/user/edit/${ele._id}`} >Eidt</Link></td>
          </tr>
        </React.Fragment>
       )

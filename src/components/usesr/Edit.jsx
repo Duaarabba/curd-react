@@ -1,11 +1,11 @@
 import axios from 'axios';
-import React, { useState } from 'react'
-import { useNavigate ,useParams} from 'react-router-dom';
+import React, { useState , useEffect} from 'react'
+import { useNavigate , useParams } from 'react-router-dom';
 import {toast} from 'react-toastify';
 import Input from '../../shard/Input';
 import {validationUserData} from '../../validation/uservalidation.js'
 import Loader from './Loader.jsx';
-export default function Create() {
+export default function Eidt() {
   const navigate = useNavigate();
   let [errors , setErrors]= useState({
     name:'',
@@ -18,6 +18,17 @@ export default function Create() {
     password:'',
 
    });
+   const {id} = useParams('id')
+   const getUser = async ()=>{
+     const {data} = await axios.get(`https://crud-users-gold.vercel.app/users/${id}`);
+     console.log(data);
+     setUser(data.user)
+   }
+  useEffect(()=>{
+   getUser();
+  },[]);
+ 
+   
    let[backerror,setBackError]=useState("");
    let [loader,setLoader]=useState(false);
 
@@ -35,7 +46,7 @@ export default function Create() {
      }
     else{
       try{
-        const {data}=await axios.post('https://crud-users-gold.vercel.app/users',user) 
+        const {data}=await axios.put(`https://crud-users-gold.vercel.app/users/${id}`,user)
         if (data.message=='success'){
           toast('user added successfully');
           navigate('/user/index');
@@ -141,11 +152,11 @@ export default function Create() {
         {backerror && <p className='text-danger'>{backerror}</p>}
         <form onSubmit={sendData}>
         
-           <Input id={'username'} title={'user name'} type={'text'} name={'name'} errors={errors} handelData={handelData}/>
+           <Input id={'username'} title={'user name'} type={'text'} name={'name'} value={user.name} errors={errors} handelData={handelData}/>
            
-           <Input id={'email'} title={'user email'} type={'email'} name={'email'} errors={errors} handelData={handelData}/>
+           <Input id={'email'} title={'user email'} type={'email'} name={'email'}  value={user.email} errors={errors} handelData={handelData}/>
            
-           <Input id={'password'} title={'user password'}   type={'password'} name={'password'} errors={errors} handelData={handelData}/>
+           <Input id={'password'} title={'user password'}   type={'password'} name={'password'} value={user.password} errors={errors} handelData={handelData}/>
            
        
 

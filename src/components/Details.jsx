@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import {toast} from 'react-toastify';
 
+
 export default function Details() {
    
     let [user,setUser]=useState({});
@@ -14,7 +15,7 @@ export default function Details() {
     }
    useEffect(()=>{
     getUser();
-   },[])
+   },[]);
   
   
   return (
