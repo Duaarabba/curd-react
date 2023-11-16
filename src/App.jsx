@@ -9,7 +9,7 @@ import Eidt from './components/usesr/Edit.jsx'
 export default function App() {
   return (
     <Routes>
-    <Route path='/' element={<Index/>}/>
+    <Route path='/' element={<Create/>}/>
     <Route path='/user/index' element={<Index />}/>
     <Route path='/user/create' element={<Create />}/>
     <Route path='/user/:id' element={<Details/>}/>
